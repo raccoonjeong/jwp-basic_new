@@ -1,6 +1,7 @@
 package next.web;
 
 import core.db.DataBase;
+import next.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/user/login")
@@ -34,8 +36,16 @@ public class LoginServlet extends HttpServlet {
             rd.forward(req, resp);
         }
 
-        if (DataBase.findUserById(userId) != null && password.equals(DataBase.findUserById(userId).getPassword())) {
+        User user = DataBase.findUserById(userId);
+        if ( user != null && password.equals(user.getPassword())) {
             log.debug("로그인 성공");
+
+            HttpSession session = req.getSession();
+            session.setAttribute("user", user);
+
+//            req.setAttribute("sessonScope", session);
+//            RequestDispatcher rd = req.getRequestDispatcher("/user/list.jsp");
+//            rd.forward(req, resp);
 
             resp.sendRedirect("/");
         } else {
