@@ -21,7 +21,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        RequestDispatcher rd = req.getRequestDispatcher("/user/login.jsp");
+        rd.forward(req, resp);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class LoginServlet extends HttpServlet {
         log.debug("userId: {}, password: {}", userId, password);
 
         if("".equals(userId) || "".equals(password)) {
-            RequestDispatcher rd = req.getRequestDispatcher("/user/login_failed.html");
+            RequestDispatcher rd = req.getRequestDispatcher("/user/login_failed.jsp");
             rd.forward(req, resp);
         }
 
@@ -50,7 +51,7 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect("/");
         } else {
             log.debug("로그인 실패");
-            RequestDispatcher rd = req.getRequestDispatcher("/user/login_failed.html");
+            RequestDispatcher rd = req.getRequestDispatcher("/user/login_failed.jsp");
             rd.forward(req, resp);
         }
 

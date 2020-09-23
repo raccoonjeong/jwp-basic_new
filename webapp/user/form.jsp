@@ -1,7 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<jsp:include page="header.jsp"></jsp:include>
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <jsp:include page="/include/header.jsp"></jsp:include>
+</head>
+<body>
+
+<jsp:include page="/include/navigation.jsp"></jsp:include>
 
 <div class="container" id="main">
    <div class="col-md-6 col-md-offset-3">
