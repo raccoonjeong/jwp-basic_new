@@ -27,7 +27,7 @@
                         <td>${user.name}</td>
                         <td>${user.email}</td>
                         <td>
-                            <form action="/user/update" method="get">
+                            <form action="/user/updateForm" method="get">
                                 <input type="hidden" name="userId" value="${user.userId}">
                                 <button type="submit" class="btn btn-success" role="button">수정</button>
                             </form>
