@@ -4,11 +4,10 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    <jsp:include page="/include/header.jsp"></jsp:include>
+    <%@ include file="/include/header.jspf" %>
 </head>
 <body>
-
-<jsp:include page="/include/navigation.jsp"></jsp:include>
+<%@ include file="/include/navigation.jspf" %>
 
 <div class="container" id="main">
     <div class="col-md-10 col-md-offset-1">
@@ -26,11 +25,7 @@
                         <td>${user.userId}</td>
                         <td>${user.name}</td>
                         <td>${user.email}</td>
-                        <td>
-                            <form action="/user/updateForm" method="get">
-                                <input type="hidden" name="userId" value="${user.userId}">
-                                <button type="submit" class="btn btn-success" role="button">수정</button>
-                            </form>
+                        <td><a href="/users/updateForm?userId=${user.userId}" class="btn btn-success" role="button">수정</a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -40,9 +35,6 @@
     </div>
 </div>
 
-<!-- script references -->
-<script src="../js/jquery-2.2.0.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/scripts.js"></script>
+<%@ include file="/include/footer.jspf" %>
 </body>
 </html>
