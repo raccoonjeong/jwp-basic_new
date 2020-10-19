@@ -43,34 +43,51 @@ public class UserDao {
 
 
     public List<User> findAll() throws SQLException {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS";
-            pstmt = con.prepareStatement(sql);
-            rs = pstmt.executeQuery();
+        SelectJdbcTemplate selectJdbcTemplate = new SelectJdbcTemplate() {
+            @Override
+            Object mapRow(ResultSet rs) throws SQLException {
+                List<User> userList = new ArrayList<>();
+                if (rs.next()) {
+                    userList.add(new User(rs.getString("userId"),
+                            rs.getString("password"),
+                            rs.getString("name"),
+                            rs.getString("email")));
+                }
+                return userList;
+            }
+        };
 
-            List<User> userList = new ArrayList<>();
-            if (rs.next()) {
-                userList.add(new User(rs.getString("userId"),
-                        rs.getString("password"),
-                        rs.getString("name"),
-                        rs.getString("email")));
-            }
-            return userList;
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
+        String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS";
+        return (List)selectJdbcTemplate.select(sql);
+
+//        Connection con = null;
+//        PreparedStatement pstmt = null;
+//        ResultSet rs = null;
+//        try {
+//            con = ConnectionManager.getConnection();
+//            String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS";
+//            pstmt = con.prepareStatement(sql);
+//            rs = pstmt.executeQuery();
+//
+//            List<User> userList = new ArrayList<>();
+//            if (rs.next()) {
+//                userList.add(new User(rs.getString("userId"),
+//                        rs.getString("password"),
+//                        rs.getString("name"),
+//                        rs.getString("email")));
+//            }
+//            return userList;
+//        } finally {
+//            if (rs != null) {
+//                rs.close();
+//            }
+//            if (pstmt != null) {
+//                pstmt.close();
+//            }
+//            if (con != null) {
+//                con.close();
+//            }
+//        }
     }
 
     public User findByUserId(String userId) throws SQLException {

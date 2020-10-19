@@ -27,16 +27,16 @@ public class UserDaoTest {
 
         UserDao userDao = new UserDao();
 
-        InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate();
-        insertJdbcTemplate.insert(expected, userDao);
+        // InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate();
+        // insertJdbcTemplate.insert(expected, userDao);
 
         User actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
 
         expected.update(new User("userId", "password2", "name2", "sanjigi@email.com"));
 
-        UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate();
-        updateJdbcTemplate.update(expected, userDao);
+        // UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate();
+        // updateJdbcTemplate.update(expected, userDao);
         actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
     }
