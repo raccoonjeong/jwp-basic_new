@@ -49,7 +49,7 @@ public class JdbcTemplate {
         }
     }
 
-    public <T> T queryForObject(String sql,PreparedStatementSetter pss, RowMapper<T> rowMapper) {
+    public <T> T queryForObject(String sql, PreparedStatementSetter pss, RowMapper<T> rowMapper) {
        List<T> result = query(sql, pss, rowMapper);
        if (result.isEmpty()) {
            return null;
