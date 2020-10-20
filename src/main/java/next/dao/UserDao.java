@@ -11,116 +11,80 @@ import core.jdbc.ConnectionManager;
 import next.model.User;
 
 public class UserDao {
-    public void insert(User user) throws SQLException {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate() {
+    public void insert(User user) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+
+        String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update2(sql, new PreparedStatementSetter() {
             @Override
-            void setValues(PreparedStatement pstmt) throws SQLException {
+            public void values(PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, user.getUserId());
                 pstmt.setString(2, user.getPassword());
                 pstmt.setString(3, user.getName());
                 pstmt.setString(4, user.getEmail());
             }
-        };
-        String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update2(sql);
+        });
     }
 
-    public void update(User user) throws SQLException {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate() {
-
+    public void update(User user) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql =  "UPDATE USERS SET PASSWORD = ?, NAME = ?, EMAIL = ? WHERE USERID = ?";
+        jdbcTemplate.update2(sql, new PreparedStatementSetter() {
             @Override
-            void setValues(PreparedStatement pstmt) throws SQLException {
+            public void values(PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, user.getPassword());
                 pstmt.setString(2, user.getName());
                 pstmt.setString(3, user.getEmail());
                 pstmt.setString(4, user.getUserId());
             }
-        };
-        String sql =  "UPDATE USERS SET PASSWORD = ?, NAME = ?, EMAIL = ? WHERE USERID = ?";
-        jdbcTemplate.update2(sql);
+        });
     }
 
-
-
-    public List<User> findAll() throws SQLException {
-        SelectJdbcTemplate selectJdbcTemplate = new SelectJdbcTemplate() {
-            @Override
-            Object mapRow(ResultSet rs) throws SQLException {
-                List<User> userList = new ArrayList<>();
-                if (rs.next()) {
-                    userList.add(new User(rs.getString("userId"),
-                            rs.getString("password"),
-                            rs.getString("name"),
-                            rs.getString("email")));
-                }
-                return userList;
-            }
-        };
+    public List<User> findAll() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
         String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS";
-        return (List)selectJdbcTemplate.select(sql);
 
-//        Connection con = null;
-//        PreparedStatement pstmt = null;
-//        ResultSet rs = null;
-//        try {
-//            con = ConnectionManager.getConnection();
-//            String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS";
-//            pstmt = con.prepareStatement(sql);
-//            rs = pstmt.executeQuery();
-//
-//            List<User> userList = new ArrayList<>();
-//            if (rs.next()) {
-//                userList.add(new User(rs.getString("userId"),
-//                        rs.getString("password"),
-//                        rs.getString("name"),
-//                        rs.getString("email")));
-//            }
-//            return userList;
-//        } finally {
-//            if (rs != null) {
-//                rs.close();
-//            }
-//            if (pstmt != null) {
-//                pstmt.close();
-//            }
-//            if (con != null) {
-//                con.close();
-//            }
-//        }
+        return jdbcTemplate.query(sql,
+                new PreparedStatementSetter() {
+                    @Override
+                    public void values(PreparedStatement pstmt) throws SQLException {
+
+                    }
+                },
+                new RowMapper<User>() {
+                    @Override
+                    public User mapRow(ResultSet rs) throws SQLException {
+                        return new User(rs.getString("userId"),
+                                        rs.getString("password"),
+                                        rs.getString("name"),
+                                        rs.getString("email"));
+                    }
+        }) ;
+
     }
 
-    public User findByUserId(String userId) throws SQLException {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, userId);
+    public User findByUserId(String userId) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-            rs = pstmt.executeQuery();
+        String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS";
 
-            User user = null;
-            if (rs.next()) {
-                user = new User(rs.getString("userId"),
-                        rs.getString("password"),
-                        rs.getString("name"),
-                        rs.getString("email"));
-            }
-
-            return user;
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
+        return jdbcTemplate.queryForObject(sql,
+                new PreparedStatementSetter() {
+                    @Override
+                    public void values(PreparedStatement pstmt) throws SQLException {
+                        pstmt.setString(1, userId);
+                    }
+                },
+                new RowMapper<User>() {
+                    @Override
+                    public User mapRow(ResultSet rs) throws SQLException {
+                        return new User(rs.getString("userId"),
+                                    rs.getString("password"),
+                                    rs.getString("name"),
+                                    rs.getString("email"));
+                        }
+                    }
+        );
     }
 }
