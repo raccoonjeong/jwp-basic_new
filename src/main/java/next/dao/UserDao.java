@@ -15,31 +15,18 @@ public class UserDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
         String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
-        PreparedStatementSetter pss = new PreparedStatementSetter() {
-            @Override
-            public void values(PreparedStatement pstmt) throws SQLException {
-                pstmt.setString(1, user.getUserId());
-                pstmt.setString(2, user.getPassword());
-                pstmt.setString(3, user.getName());
-                pstmt.setString(4, user.getEmail());
-            }
-        };
-        jdbcTemplate.update2(sql, pss);
+
+        jdbcTemplate.update2(sql, user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
     }
 
     public void update(User user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         String sql =  "UPDATE USERS SET PASSWORD = ?, NAME = ?, EMAIL = ? WHERE USERID = ?";
-        PreparedStatementSetter pss = new PreparedStatementSetter() {
-            @Override
-            public void values(PreparedStatement pstmt) throws SQLException {
-                pstmt.setString(1, user.getPassword());
-                pstmt.setString(2, user.getName());
-                pstmt.setString(3, user.getEmail());
-                pstmt.setString(4, user.getUserId());
-            }
-        };
-        jdbcTemplate.update2(sql, pss);
+
+        jdbcTemplate.update2(sql,  user.getPassword(),
+        user.getName(),
+        user.getEmail(),
+        user.getUserId());
     }
 
     public List<User> findAll() {
@@ -69,7 +56,7 @@ public class UserDao {
     public User findByUserId(String userId) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-        String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS";
+        String sql = "SELECT USERID, PASSWORD, NAME, EMAIL FROM USERS WHERE USERID = ?";
 
 
         PreparedStatementSetter pss = new PreparedStatementSetter() {
@@ -78,16 +65,22 @@ public class UserDao {
                 pstmt.setString(1, userId);
             }
         };
-        RowMapper<User> rm = new RowMapper<User>() {
-            @Override
-            public User mapRow(ResultSet rs) throws SQLException {
-                return new User(rs.getString("userId"),
+//        RowMapper<User> rm = new RowMapper<User>() {
+//            @Override
+//            public User mapRow(ResultSet rs) throws SQLException {
+//                return new User(rs.getString("userId"),
+//                        rs.getString("password"),
+//                        rs.getString("name"),
+//                        rs.getString("email"));
+//            }
+//        };
+
+        return jdbcTemplate.queryForObject(sql, pss,
+                (ResultSet rs) ->
+                new User(rs.getString("userId"),
                         rs.getString("password"),
                         rs.getString("name"),
-                        rs.getString("email"));
-            }
-        };
-
-        return jdbcTemplate.queryForObject(sql, pss, rm);
+                        rs.getString("email"))
+        );
     }
 }

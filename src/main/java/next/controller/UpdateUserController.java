@@ -33,7 +33,7 @@ public class UpdateUserController implements Controller {
         UserDao userDao = new UserDao();
         try {
             userDao.update(user);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
 

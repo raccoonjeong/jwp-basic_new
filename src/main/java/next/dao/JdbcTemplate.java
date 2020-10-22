@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTemplate {
-    public void update2(String sql, PreparedStatementSetter pstmtSetter) throws DataAccessException {
+    public void update2(String sql, Object... params) throws DataAccessException {
 
         try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmtSetter.values(pstmt);
+            PreparedStatement pstmt = con.prepareStatement(sql)) {
+            for (int i = 0; i < params.length; i++) {
+                pstmt.setObject(i + 1, params[i]);
+            }
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e);
