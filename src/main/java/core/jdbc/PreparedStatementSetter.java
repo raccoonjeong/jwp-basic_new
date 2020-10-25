@@ -1,8 +1,8 @@
-package next.dao;
+package core.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface PreparedStatementSetter {
-    void values(PreparedStatement pstmt) throws SQLException ;
+    void setParameters(PreparedStatement pstmt) throws SQLException;
 }

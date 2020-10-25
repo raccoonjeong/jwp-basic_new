@@ -24,19 +24,13 @@ public class UserDaoTest {
     @Test
     public void crud() throws Exception {
         User expected = new User("userId", "password", "name", "javajigi@email.com");
-
         UserDao userDao = new UserDao();
-
-        // InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate();
-        // insertJdbcTemplate.insert(expected, userDao);
-
+        userDao.insert(expected);
         User actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
 
         expected.update(new User("userId", "password2", "name2", "sanjigi@email.com"));
-
-        // UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate();
-        // updateJdbcTemplate.update(expected, userDao);
+        userDao.update(expected);
         actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
     }
@@ -47,5 +41,4 @@ public class UserDaoTest {
         List<User> users = userDao.findAll();
         assertEquals(1, users.size());
     }
-
 }
