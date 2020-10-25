@@ -10,6 +10,10 @@ public class Answer {
     Date createdDate;
     Long questionId;
 
+    public long getTimeFromCreateDate() {
+        return this.createdDate.getTime();
+    }
+
     public Answer(Long answerId, String writer, String contents,
                   Date createdDate, Long questionId) {
         this.answerId = answerId;
@@ -17,6 +21,11 @@ public class Answer {
         this.contents = contents;
         this.createdDate = createdDate;
         this.questionId = questionId;
+    }
+
+    public Answer(String writer, String contents,
+                  Long questionId) {
+        this(0L, writer, contents, new Date(), questionId);
     }
 
     public Long getAnswerId() {

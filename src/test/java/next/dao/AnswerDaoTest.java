@@ -27,4 +27,13 @@ public class AnswerDaoTest {
         List<Answer> result = answerDao.findByQuestionId(8L);
         assertEquals(3, result.size());
     }
+
+    @Test
+    public void insertTest() {
+        AnswerDao answerDao = new AnswerDao();
+        Answer insertedAnswer =
+                answerDao.insert(new Answer("test Writer", "test Contents", 123L));
+        assertEquals(insertedAnswer.getWriter()
+                , answerDao.findByQuestionId(123L).get(0).getWriter());
+    }
 }
