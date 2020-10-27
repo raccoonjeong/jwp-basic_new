@@ -17,7 +17,6 @@ public class ShowController implements Controller {
         QuestionDao questionDao = new QuestionDao();
         AnswerDao answerDao = new AnswerDao();
         Long questionId = Long.valueOf(req.getParameter("questionId"));
-
         req.setAttribute("question", questionDao.findByQuestionId(questionId));
         req.setAttribute("answers", answerDao.findByQuestionId(questionId));
         return "/qna/show.jsp";

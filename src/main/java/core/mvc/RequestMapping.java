@@ -5,6 +5,7 @@ import java.util.Map;
 
 import next.controller.ShowController;
 import next.controller.api.AddAnswerController;
+import next.controller.api.DeleteAnswerController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,7 @@ public class RequestMapping {
         mappings.put("/qna/show", new ShowController());
 
         mappings.put("/api/qna/addAnswer", new AddAnswerController());
+        mappings.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
         logger.info("Initialized Request Mapping!");
     }
